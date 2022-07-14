@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
     public static int countEqualIgnoreCaseAndSpaces(String[] words, String sample) {
-        if(sample != null && sample != "" && words != null ){
+        if(sample != null && !sample.isEmpty() && words != null ){
             int i = 0;
             for (String word:words){
                     if (word.strip().compareToIgnoreCase(sample.strip()) == 0) i++;            }
@@ -17,16 +17,15 @@ public class StringUtil {
         text = text.replaceFirst("^[ ,.;:?!]+", "");
         Pattern patForSplit = Pattern.compile("[ ,.;:?!]+");
         String [] result =  patForSplit.split(text);
-        if (result[0] == "") return null; else return result;} else return null;
+        if (result[0].isEmpty()) return null; else return result;} else return null;
     }
     static Boolean pathHasError(String path) {
         Pattern rightPath = Pattern.compile("^[~/(C:)a-zA-Z.]");
         if (rightPath.matcher(path).find())
-          if (path.indexOf("/") == -1 || path.indexOf("\\") == -1) { //file don't has symbols /&\ at same time
+          if (!path.contains("/") || !path.contains("\\")) { //file don't has symbols /&\ at same time
                 if (path.indexOf("C:", 2) == -1 && path.indexOf("~", 1) == -1) { //Symbols C: & ~ don't have in the middle
                     if (!path.matches("C:(.*)~|~(.*)\\\\(.*)|C:(.*)/"))
-                        if (!path.matches("(.*)/{2}(.*)"))
-                        return false;
+                        return path.matches("(.*)/{2}(.*)");
                 }
           //  }
         }
@@ -66,7 +65,7 @@ public class StringUtil {
     public static String joinWords(String[] words) {
         StringBuilder joinWords = new StringBuilder("[");
         if (words != null && words.length > 0 ){
-            for (String word:words) if (word != ""){
+            for (String word:words) if (!word.isEmpty()){
                 joinWords.append(word).append(", ");
             }
             if (joinWords.length() > 1) {
